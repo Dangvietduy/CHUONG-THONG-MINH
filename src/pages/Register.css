@@ -1,0 +1,46 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    padding: 20px;
+    background-image: url('../img/bg.jpg'); /* Thay thế bằng đường dẫn tới tấm hình của bạn */
+    background-size: cover; /* Đảm bảo tấm hình bao phủ toàn bộ giao diện */
+    background-repeat: no-repeat; /* Ngăn chặn việc lặp lại tấm hình */
+    background-position: center; /* Canh giữa tấm hình */
+}
+
+.register-item {
+    width: 100%;
+    /* max-width: 400px; */
+    margin-bottom: 20px;
+}
+.register-button {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 20px;
+}
+
+.icon-eye {
+    cursor: pointer;
+}
+
+/* CSS for valid input */
+.ion-valid {
+    border-color: green;
+  }
+  
+  /* CSS for invalid input */
+  .ion-invalid {
+    border-color: red;
+  }
+  
+
+.ion-touched {
+    /* Add additional styles if needed */
+}
+.login-links{
+    font-size: 20px;
+}

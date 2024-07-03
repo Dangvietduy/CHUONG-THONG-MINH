@@ -1,0 +1,33 @@
+.subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Đảm bảo nội dung không bị ngắt dòng */
+  }
+  /* File ListRecordings.css */
+
+/* Center align card titles and subtitles */
+
+  
+  /* Adjust card size for mobile */
+  ion-card {
+    max-width: 90%; /* Adjust as needed */
+    margin: 10px auto; 
+  }
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .details-container {
+    text-align: center;
+    margin-top: 200px; 
+  }
+  
+  .delete-button {
+    margin-top: 20px; /* Adjust margin as needed */
+  }
+  
+  
