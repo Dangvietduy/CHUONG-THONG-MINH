@@ -1,35 +1,33 @@
+import React, { useState } from "react";
 import {
   IonButton,
   IonContent,
-  IonHeader,
   IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonLoading,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonToast,
 } from "@ionic/react";
-import { eyeOff, eye, logoIonic, notificationsCircleOutline } from "ionicons/icons";
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useHistory, Link } from "react-router-dom";
+import firebase from "firebase/compat/app"; // Import firebase compat version
+import "firebase/compat/auth"; // Import compat version of authentication module from Firebase
+import { notificationsCircleOutline, eye, eyeOff } from "ionicons/icons";
+import "./Login.css";
 import { auth } from "../firebaseConfig";
-import { useHistory, Link } from "react-router-dom"; // Thêm Link từ react-router-dom
-import './Login.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [passwordShown, setPasswordShown] = useState(false);
-  const history = useHistory();
-  const [isTouched, setIsTouched] = useState(false);
-  const [isValid, setIsValid] = useState<boolean>();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [isValid, setIsValid] = useState<boolean | null>(null);
+  const [isTouched, setIsTouched] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const [error, setError] = useState("");
 
   const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,15 +37,26 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setEmail("");
-      setPassword("");
-      history.push("/home");
+      const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+
+      if (response.user) {
+        localStorage.setItem("token", "yourAuthToken");
+        setEmail("");
+        setPassword("");
+        history.push("/home");
+      } else {
+        setToastMessage("Authentication failed");
+        setShowToast(true);
+      }
     } catch (error) {
+      console.error("Login error: ", error);
       setToastMessage("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+      setPassword("");
+
       setShowToast(true);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const validate = (event: any) => {
@@ -65,74 +74,69 @@ const Login: React.FC = () => {
   };
 
   return (
-    <IonPage>
-      <IonContent>
-        <div className="login-container">
-          <div className="text-login">
-            <IonLabel className="login-text">CHUÔNG THÔNG MINH</IonLabel>
-            <br /><br /><br /><br />
-            <IonIcon
-              className="login-icon"
-              icon={notificationsCircleOutline}
-            ></IonIcon>
-          </div>
+    <>
+      <IonPage>
+        <IonContent>
+          <div className="login-container">
+            <div className="text-login">
+              <IonLabel className="login-text">CHUÔNG THÔNG MINH</IonLabel>
+              <br />
+            </div>
 
-          <br />
-          <IonItem className="login-item">
-            <IonInput
-              className={`${isValid && "ion-valid"} ${
-                isValid === false && "ion-invalid"
-              } ${isTouched && "ion-touched"}`}
-              type="email"
-              value={email}
-              label="Email"
-              labelPlacement="floating"
-              onIonInput={(event) => validate(event)}
-              onIonBlur={() => markTouched()}
-            ></IonInput>
-          </IonItem>
+            <br />
+            <IonItem className="login-item">
+              <IonInput
+                className={`${isValid && "ion-valid"} ${
+                  isValid === false && "ion-invalid"
+                } ${isTouched && "ion-touched"}`}
+                type="email"
+                value={email}
+                label="Email"
+                labelPlacement="floating"
+                onIonInput={(event) => validate(event)}
+                onIonBlur={() => markTouched()}
+              ></IonInput>
+            </IonItem>
 
-          <IonItem className="login-item">
-            <IonInput
-              type={passwordShown ? "text" : "password"}
-              value={password}
-              label="Password"
-              labelPlacement="floating"
-              onIonChange={(e) => setPassword(e.detail.value!)}
-              onIonBlur={() => markTouched()}
-            ></IonInput>
-            <IonIcon
-              className="icon-eye"
-              slot="end"
-              icon={passwordShown ? eyeOff : eye}
-              onClick={togglePasswordVisibility}
+            <IonItem className="login-item">
+              <IonInput
+                type={passwordShown ? "text" : "password"}
+                value={password}
+                label="Password"
+                labelPlacement="floating"
+                onIonChange={(e) => setPassword(e.detail.value!)}
+                onIonBlur={() => markTouched()}
+              ></IonInput>
+              <IonIcon
+                className="icon-eye"
+                slot="end"
+                icon={passwordShown ? eyeOff : eye}
+                onClick={togglePasswordVisibility}
+              />
+            </IonItem>
+
+            <IonButton
+              className="login-button"
+              expand="block"
+              onClick={handleLogin}
+            >
+              Đăng nhập
+            </IonButton>
+            <IonLoading isOpen={loading} message={"Đang xử lí..."} />
+            <IonToast
+              isOpen={showToast}
+              message={toastMessage}
+              duration={2000}
+              onDidDismiss={() => setShowToast(false)}
             />
-          </IonItem>
-          
-          <IonButton
-            className="login-button"
-            expand="block"
-            onClick={handleLogin}
-          >
-            Đăng nhập
-          </IonButton>
-          <IonLoading isOpen={loading} message={"Please wait..."} />
-          <IonToast
-            isOpen={showToast}
-            message={toastMessage}
-            duration={2000}
-            onDidDismiss={() => setShowToast(false)}
-          />
-          <br />
-          {/* Thêm các liên kết */}
-          <div className="login-links">
-            <Link to="/forgot-password" style={{ textDecoration: "none"}}>Quên mật khẩu?</Link>
-            &nbsp; &nbsp;
-            {/* <Link to="/register">Đăng ký</Link> */}
+            <br />
+            <div className="login-links">
+              <Link to="/forgot-password" style={{ textDecoration: "none" }}>Quên mật khẩu?</Link>
+            </div>
           </div>
-        </div>
-      </IonContent>
-    </IonPage>
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 

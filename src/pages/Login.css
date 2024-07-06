@@ -1,63 +1,45 @@
-.register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    padding: 20px;
-    background-image: url('../img/bg.jpg'); /* Thay thế bằng đường dẫn tới tấm hình của bạn */
-    background-size: cover; /* Đảm bảo tấm hình bao phủ toàn bộ giao diện */
-    background-repeat: no-repeat; /* Ngăn chặn việc lặp lại tấm hình */
-    background-position: center; /* Canh giữa tấm hình */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 16px;
+  background-image: url('../img/bg.jpg');
 }
 
-.text-login{
-    font-size: 30px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    margin-bottom: 120px;
-    .login-icon {
-        position: absolute;
-        display: flex;
-        font-size: 150px;
-        text-align: center;
-        left: 50%;
-        /* top: 50%; */
-        transform: translate(-50%, -50%);
-    }
-    
+.text-login {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+
+/* .login-icon {
+  font-size: 48px;
+  color: var(--ion-color-primary);
+} */
 
 .login-item {
-    width: 100%;
-    /* max-width: 400px; */
-    margin-bottom: 20px;
-    /* --background: #a7a7a7; */
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 16px;
 }
 
 .login-button {
-    width: 100%;
-    height: 50px;
-    border-radius: 25px;
+  width: 100%;
+  height: 50px;
+  max-width: 400px;
+  font-size: 20px;
+  color: aliceblue;
 }
 
 .icon-eye {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-/* You can adjust the class names if needed */
-.ion-valid {
-    border-color: green;
-}
-
-.ion-invalid {
-    border-color: red;
-}
-
-.ion-touched {
-    /* Add additional styles if needed */
-}
-.login-links{
-    font-size: 20px;
-}
-
-  
+/* .login-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+} */

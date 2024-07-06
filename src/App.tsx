@@ -1,4 +1,4 @@
-import { Redirect, Route, useLocation } from "react-router-dom";
+import { Redirect, Route, useLocation, useHistory } from "react-router-dom";
 import {
   IonApp,
   IonRouterOutlet,
@@ -15,12 +15,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import {
-  logInOutline,
-  homeOutline,
-  listCircleOutline,
-  search,
-} from "ionicons/icons";
+import { logInOutline, listCircleOutline, homeOutline } from "ionicons/icons";
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
@@ -45,67 +40,99 @@ const App: React.FC = () => {
   );
 };
 
+// PrivateRoute component to protect routes
+const PrivateRoute: React.FC<any> = ({ component: Component, ...rest }) => {
+  const isAuthenticated = !!localStorage.getItem("token");
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
+};
+
 const MainApp: React.FC = () => {
   const location = useLocation();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    // Clear the token (assuming it's stored in localStorage)
+    localStorage.removeItem("token");
+
+    // Clear the history stack and redirect to login page
+    history.push("/login");
+    history.go(0); // Reload the page to reset the navigation stack
+  };
 
   return (
     <>
-    <IonMenu side="end" contentId="main-content">
+      <IonMenu side="end" contentId="main-content">
         <IonHeader>
           <IonToolbar>
             <IonTitle>Menu Content</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent className="ion-padding">This is the menu content.</IonContent>
+        <IonContent className="ion-padding">
+          This is the menu content.
+        </IonContent>
       </IonMenu>
-      <IonRouterOutlet>
+      <IonRouterOutlet id="main-content">
         <Route path="/login" component={Login} exact={true} />
         <Route path="/register" component={Register} exact={true} />
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/login" />} />
-        <Route exact path="/forgot-password" component={ResetPassword} />
+        <Route path="/forgot-password" component={ResetPassword} exact={true} />
+        <PrivateRoute path="/home" component={Home} exact={true} />
+        <PrivateRoute
+          path="/listRecodings"
+          component={ListRecodings}
+          exact={true}
+        />
+        <PrivateRoute
+          path="/search"
+          component={() => <div>Search Page</div>}
+          exact={true}
+        />
+        <Redirect exact path="/" to="/login" />
       </IonRouterOutlet>
 
-      {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/forgot-password" && (
-        <IonTabs>
-          <IonRouterOutlet>
-            <Redirect exact path="/" to="/login" />
-            <Route path="/home" render={() => <Home />} exact={true} />
-            <Route
-              path="/listRecodings"
-              render={() => <ListRecodings />}
-              exact={true}
-            />
-            <Route
-              path="/search"
-              render={() => <div>Search Page</div>}
-              exact={true}
-            />
-          </IonRouterOutlet>
+      {location.pathname !== "/login" &&
+        location.pathname !== "/register" &&
+        location.pathname !== "/forgot-password" && (
+          <IonTabs>
+            <IonRouterOutlet>
+              <Redirect exact path="/" to="/login" />
+              <PrivateRoute path="/home" component={Home} exact={true} />
+              <PrivateRoute
+                path="/listRecodings"
+                component={ListRecodings}
+                exact={true}
+              />
+              <PrivateRoute
+                path="/search"
+                component={() => <div>Search Page</div>}
+                exact={true}
+              />
+            </IonRouterOutlet>
 
-          <IonTabBar slot="bottom">
-            {/* <IonTabButton tab="home" href="/home">
-              <IonIcon icon={homeOutline} />
-              <IonLabel>Home</IonLabel>
-            </IonTabButton> */}
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon icon={homeOutline} />
+                <IonLabel>Trang Chủ</IonLabel>
+              </IonTabButton>
 
-            <IonTabButton tab="ListRecodings" href="/listRecodings">
-              <IonIcon icon={listCircleOutline} />
-              <IonLabel>List Recordings</IonLabel>
-            </IonTabButton>
+              <IonTabButton tab="listRecodings" href="/listRecodings">
+                <IonIcon icon={listCircleOutline} />
+                <IonLabel>Danh Sách Ghi Âm</IonLabel>
+              </IonTabButton>
 
-            {/* <IonTabButton tab="search" href="/search">
-              <IonIcon icon={search} />
-              <IonLabel>Search</IonLabel>
-            </IonTabButton> */}
-
-            <IonTabButton tab="logout" href="/login">
-              <IonIcon icon={logInOutline} />
-              <IonLabel>Logout</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      )}
+              <IonTabButton tab="logout" onClick={handleLogout}>
+                <IonIcon icon={logInOutline} />
+                <IonLabel>Đăng Xuất</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        )}
     </>
   );
 };

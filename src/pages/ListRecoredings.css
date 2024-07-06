@@ -30,4 +30,7 @@
     margin-top: 20px; /* Adjust margin as needed */
   }
   
+  .list-container{
+    background-image: url('../img/bg.jpg');
+  }
   

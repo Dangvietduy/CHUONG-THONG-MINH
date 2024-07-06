@@ -1,11 +1,13 @@
-// Import the functions you need from the SDKs you need
+// firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
-import {getFirestore} from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 
-
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAmq8e1CtC2PaFQVIx3YN0UB15FG7yhlpo",
   authDomain: "chuong-thong-minh-v1.firebaseapp.com",
@@ -19,17 +21,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const storage = getStorage(app);
+
+// Initialize services
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
+const firestore = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
 
-const firebaseApp = initializeApp(firebaseConfig); 
-export const projectFirestore = getFirestore();
-export const storage = getStorage();
-export const firebaseAuth = getAuth(firebaseApp);
-export const firebaseAnalytics = getAnalytics(firebaseApp);
-
-
-
-
-export { auth };
+export { app, analytics, auth, storage, firestore };

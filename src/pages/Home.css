@@ -1,0 +1,22 @@
+.home-container {
+    background-image: url('../img/bg.jpg');
+    background-size: cover; /* đảm bảo ảnh nền được hiển thị đầy đủ */
+    display: flex;
+    flex-direction: column; /* xếp theo chiều dọc */
+    justify-content: center; /* căn giữa theo chiều ngang */
+    align-items: center; /* căn giữa theo chiều dọc */
+    height: 100%; /* sử dụng chiều cao toàn màn hình */
+  }
+  
+  .bell-icon {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px; /* khoảng cách từ biểu tượng lên dòng chữ */
+  }
+  
+  .bell-title {
+    font-size: 35px; /* cỡ chữ cho dòng chữ */
+    text-align: center; /* căn giữa theo chiều ngang */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  
