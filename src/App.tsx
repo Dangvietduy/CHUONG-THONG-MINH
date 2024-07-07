@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Redirect, Route, useLocation, useHistory } from "react-router-dom";
 import {
   IonApp,
@@ -13,6 +14,7 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
+  IonAlert,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { logInOutline, listCircleOutline, homeOutline } from "ionicons/icons";
@@ -56,12 +58,10 @@ const PrivateRoute: React.FC<any> = ({ component: Component, ...rest }) => {
 const MainApp: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
 
   const handleLogout = () => {
-    // Clear the token (assuming it's stored in localStorage)
     localStorage.removeItem("token");
-
-    // Clear the history stack and redirect to login page
     history.push("/login");
     history.go(0); // Reload the page to reset the navigation stack
   };
@@ -126,13 +126,38 @@ const MainApp: React.FC = () => {
                 <IonLabel>Danh Sách Ghi Âm</IonLabel>
               </IonTabButton>
 
-              <IonTabButton tab="logout" onClick={handleLogout}>
+              <IonTabButton
+                tab="logout"
+                onClick={() => setShowLogoutAlert(true)}
+              >
                 <IonIcon icon={logInOutline} />
                 <IonLabel>Đăng Xuất</IonLabel>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>
         )}
+
+      <IonAlert
+        isOpen={showLogoutAlert}
+        onDidDismiss={() => setShowLogoutAlert(false)}
+        header={"Xác Nhận"}
+        message={"Bạn có chắc chắn muốn đăng xuất?"}
+        buttons={[
+          {
+            text: "Hủy",
+            role: "cancel",
+            handler: () => {
+              setShowLogoutAlert(false);
+            },
+          },
+          {
+            text: "Đăng Xuất",
+            handler: () => {
+              handleLogout();
+            },
+          },
+        ]}
+      />
     </>
   );
 };

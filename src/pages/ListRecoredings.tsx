@@ -169,16 +169,6 @@ const AudioList: React.FC = () => {
             {selectedRecording && (
               <>
                 <div className="details-container">
-                  <audio
-                    className="audio-content"
-                    controls
-                    ref={(element) => setAudioElement(element)}
-                    onPlay={() => setIsPlaying(true)}
-                    onPause={() => setIsPlaying(false)}
-                  >
-                    <source src={selectedRecording.url} type="audio/mp3" />
-                    Your browser does not support the audio element.
-                  </audio>
                   <p>
                     <strong>Tên tệp tin:</strong> {selectedRecording.name}
                   </p>
@@ -190,12 +180,21 @@ const AudioList: React.FC = () => {
                     <strong>Ngày đăng tải:</strong>{" "}
                     {selectedRecording.timeCreated}
                   </p>
-
+                  <audio
+                    className="audio-content"
+                    controls
+                    ref={(element) => setAudioElement(element)}
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                  >
+                    <source src={selectedRecording.url} type="audio/mp3" />
+                    Your browser does not support the audio element.
+                  </audio>
                   <IonButton
                     onClick={() => setConfirmDelete(true)}
                     className="delete-button"
                   >
-                    <IonIcon icon={trash} /> Xóa
+                    <IonIcon icon={trash} /> &nbsp;Xóa
                   </IonButton>
                 </div>
               </>

@@ -37,7 +37,9 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const response = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
 
       if (response.user) {
         localStorage.setItem("token", "yourAuthToken");
@@ -51,7 +53,7 @@ const Login: React.FC = () => {
     } catch (error) {
       console.error("Login error: ", error);
       setToastMessage("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
-      setPassword("");
+      // setPassword("");
 
       setShowToast(true);
     } finally {
@@ -101,10 +103,10 @@ const Login: React.FC = () => {
             <IonItem className="login-item">
               <IonInput
                 type={passwordShown ? "text" : "password"}
-                value={password}
+                value={password} 
                 label="Password"
                 labelPlacement="floating"
-                onIonChange={(e) => setPassword(e.detail.value!)}
+                onIonChange={(e) => setPassword(e.detail.value!)} 
                 onIonBlur={() => markTouched()}
               ></IonInput>
               <IonIcon
@@ -131,7 +133,9 @@ const Login: React.FC = () => {
             />
             <br />
             <div className="login-links">
-              <Link to="/forgot-password" style={{ textDecoration: "none" }}>Quên mật khẩu?</Link>
+              <Link to="/forgot-password" style={{ textDecoration: "none" }}>
+                Quên mật khẩu?
+              </Link>
             </div>
           </div>
         </IonContent>
