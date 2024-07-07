@@ -24,6 +24,8 @@
   width: 100%;
   max-width: 400px;
   margin-bottom: 16px;
+  --border-width: 0;
+  border: none;
 }
 
 .login-button {
@@ -43,3 +45,10 @@
   justify-content: center;
   margin-top: 20px;
 } */
+
+/* Trong file global.css hoặc global.scss */
+ion-item {
+  --border-width: 0;
+  --border-style: none;
+}
+
